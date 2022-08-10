@@ -1,0 +1,19 @@
+{
+	"name": "ls_databricks_dungeon",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-2640854586690135.15.azuredatabricks.net/?o=2640854586690135#folder/355180467763908",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ls_kv_dungeon",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "databricks-workspace-key"
+			},
+			"existingClusterId": "0810-204239-ipynp2dy"
+		}
+	}
+}
