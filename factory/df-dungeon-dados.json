@@ -1,0 +1,9 @@
+{
+	"name": "df-dungeon-dados",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b4157873-9bb3-42fe-844c-6fc35c4ba370",
+		"tenantId": "a49e2ad8-3b8d-40e8-8c45-1505c9a243d3"
+	}
+}
