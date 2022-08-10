@@ -1,0 +1,259 @@
+{
+	"name": "test_dataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_datalake_susbecantt",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "susbecantt"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Prop_0",
+				"type": "String"
+			},
+			{
+				"name": "AP_MVM",
+				"type": "String"
+			},
+			{
+				"name": "AP_CONDIC",
+				"type": "String"
+			},
+			{
+				"name": "AP_GESTAO",
+				"type": "String"
+			},
+			{
+				"name": "AP_CODUNI",
+				"type": "String"
+			},
+			{
+				"name": "AP_AUTORIZ",
+				"type": "String"
+			},
+			{
+				"name": "AP_CMP",
+				"type": "String"
+			},
+			{
+				"name": "AP_PRIPAL",
+				"type": "String"
+			},
+			{
+				"name": "AP_VL_AP",
+				"type": "String"
+			},
+			{
+				"name": "AP_UFMUN",
+				"type": "String"
+			},
+			{
+				"name": "AP_TPUPS",
+				"type": "String"
+			},
+			{
+				"name": "AP_TIPPRE",
+				"type": "String"
+			},
+			{
+				"name": "AP_MN_IND",
+				"type": "String"
+			},
+			{
+				"name": "AP_CNPJCPF",
+				"type": "String"
+			},
+			{
+				"name": "AP_CNPJMNT",
+				"type": "String"
+			},
+			{
+				"name": "AP_CNSPCN",
+				"type": "String"
+			},
+			{
+				"name": "AP_COIDADE",
+				"type": "String"
+			},
+			{
+				"name": "AP_NUIDADE",
+				"type": "String"
+			},
+			{
+				"name": "AP_SEXO",
+				"type": "String"
+			},
+			{
+				"name": "AP_RACACOR",
+				"type": "String"
+			},
+			{
+				"name": "AP_MUNPCN",
+				"type": "String"
+			},
+			{
+				"name": "AP_UFNACIO",
+				"type": "String"
+			},
+			{
+				"name": "AP_CEPPCN",
+				"type": "String"
+			},
+			{
+				"name": "AP_UFDIF",
+				"type": "String"
+			},
+			{
+				"name": "AP_MNDIF",
+				"type": "String"
+			},
+			{
+				"name": "AP_DTINIC",
+				"type": "String"
+			},
+			{
+				"name": "AP_DTFIM",
+				"type": "String"
+			},
+			{
+				"name": "AP_TPATEN",
+				"type": "String"
+			},
+			{
+				"name": "AP_TPAPAC",
+				"type": "String"
+			},
+			{
+				"name": "AP_MOTSAI",
+				"type": "String"
+			},
+			{
+				"name": "AP_OBITO",
+				"type": "String"
+			},
+			{
+				"name": "AP_ENCERR",
+				"type": "String"
+			},
+			{
+				"name": "AP_PERMAN",
+				"type": "String"
+			},
+			{
+				"name": "AP_ALTA",
+				"type": "String"
+			},
+			{
+				"name": "AP_TRANSF",
+				"type": "String"
+			},
+			{
+				"name": "AP_DTOCOR",
+				"type": "String"
+			},
+			{
+				"name": "AP_CODEMI",
+				"type": "String"
+			},
+			{
+				"name": "AP_CATEND",
+				"type": "String"
+			},
+			{
+				"name": "AP_APACANT",
+				"type": "String"
+			},
+			{
+				"name": "AP_UNISOL",
+				"type": "String"
+			},
+			{
+				"name": "AP_DTSOLIC",
+				"type": "String"
+			},
+			{
+				"name": "AP_DTAUT",
+				"type": "String"
+			},
+			{
+				"name": "AP_CIDCAS",
+				"type": "String"
+			},
+			{
+				"name": "AP_CIDPRI",
+				"type": "String"
+			},
+			{
+				"name": "AP_CIDSEC",
+				"type": "String"
+			},
+			{
+				"name": "AP_ETNIA",
+				"type": "String"
+			},
+			{
+				"name": "AB_IMC",
+				"type": "String"
+			},
+			{
+				"name": "AB_PROCAIH",
+				"type": "String"
+			},
+			{
+				"name": "AB_DTCIRUR",
+				"type": "String"
+			},
+			{
+				"name": "AB_NUMAIH",
+				"type": "String"
+			},
+			{
+				"name": "AB_PRCAIH2",
+				"type": "String"
+			},
+			{
+				"name": "AB_PRCAIH3",
+				"type": "String"
+			},
+			{
+				"name": "AB_NUMAIH2",
+				"type": "String"
+			},
+			{
+				"name": "AB_DTCIRG2",
+				"type": "String"
+			},
+			{
+				"name": "AB_MESACOM",
+				"type": "String"
+			},
+			{
+				"name": "AB_ANOACOM",
+				"type": "String"
+			},
+			{
+				"name": "AB_PONTBAR",
+				"type": "String"
+			},
+			{
+				"name": "AB_TABBARR",
+				"type": "String"
+			},
+			{
+				"name": "AP_NATJUR",
+				"type": "String"
+			}
+		]
+	}
+}
