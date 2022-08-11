@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "ForEach1",
+				"name": "ForEachCsvSUS",
 				"type": "ForEach",
 				"dependsOn": [],
 				"userProperties": []
