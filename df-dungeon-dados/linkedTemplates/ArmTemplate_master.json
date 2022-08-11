@@ -1,0 +1,84 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "df-dungeon-dados"
+		},
+		"ls_databricks_dungeon_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0810-204239-ipynp2dy"
+		},
+		"ls_datalake_dungeon_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dungeonsdados.dfs.core.windows.net"
+		},
+		"ls_datalake_susbecantt_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://susbecantt.dfs.core.windows.net"
+		},
+		"ls_kv_dungeon_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-dungeon-dados.vault.azure.net/"
+		},
+		"test_trigger_properties_ingestion_bronze_parameters_SourceFiles": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"test_trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/d44271f6-fec8-44b4-b79f-a0fd742c7602/resourceGroups/susbecantt/providers/Microsoft.Storage/storageAccounts/susbecantt"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "df-dungeon-dados_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"ls_kv_dungeon_properties_typeProperties_baseUrl": {
+						"value": "[parameters('ls_kv_dungeon_properties_typeProperties_baseUrl')]"
+					},
+					"ls_databricks_dungeon_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('ls_databricks_dungeon_properties_typeProperties_existingClusterId')]"
+					},
+					"ls_datalake_dungeon_properties_typeProperties_url": {
+						"value": "[parameters('ls_datalake_dungeon_properties_typeProperties_url')]"
+					},
+					"ls_datalake_susbecantt_properties_typeProperties_url": {
+						"value": "[parameters('ls_datalake_susbecantt_properties_typeProperties_url')]"
+					},
+					"test_trigger_properties_ingestion_bronze_parameters_SourceFiles": {
+						"value": "[parameters('test_trigger_properties_ingestion_bronze_parameters_SourceFiles')]"
+					},
+					"test_trigger_properties_typeProperties_scope": {
+						"value": "[parameters('test_trigger_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

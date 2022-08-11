@@ -1,0 +1,499 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "df-dungeon-dados"
+		},
+		"ls_kv_dungeon_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-dungeon-dados.vault.azure.net/"
+		},
+		"ls_databricks_dungeon_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0810-204239-ipynp2dy"
+		},
+		"ls_datalake_dungeon_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://dungeonsdados.dfs.core.windows.net"
+		},
+		"ls_datalake_susbecantt_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://susbecantt.dfs.core.windows.net"
+		},
+		"test_trigger_properties_ingestion_bronze_parameters_SourceFiles": {
+			"type": "string",
+			"defaultValue": "@triggerBody().fileName"
+		},
+		"test_trigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/d44271f6-fec8-44b4-b79f-a0fd742c7602/resourceGroups/susbecantt/providers/Microsoft.Storage/storageAccounts/susbecantt"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_kv_dungeon')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ls_kv_dungeon_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_databricks_dungeon')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-2640854586690135.15.azuredatabricks.net/?o=2640854586690135#folder/355180467763908",
+					"accessToken": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_kv_dungeon",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "databricks-workspace-key"
+					},
+					"existingClusterId": "[parameters('ls_databricks_dungeon_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kv_dungeon')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_datalake_dungeon')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_datalake_dungeon_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_kv_dungeon",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "storage-key"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kv_dungeon')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ls_datalake_susbecantt')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_datalake_susbecantt_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ls_kv_dungeon",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "sus-storage-key"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kv_dungeon')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ingestion_bronze')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "to_bronze",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:45:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/aspindol@emeal.nttdata.com/dungeons_dados/bronze_ingestion",
+							"baseParameters": {
+								"new_created_files": {
+									"value": "@pipeline().parameters.SourceFiles",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "ls_databricks_dungeon",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"SourceFiles": {
+						"type": "string"
+					}
+				},
+				"folder": {
+					"name": "bronze"
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_databricks_dungeon')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/test_dataset')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_susbecantt",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "susbecantt"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Prop_0",
+						"type": "String"
+					},
+					{
+						"name": "AP_MVM",
+						"type": "String"
+					},
+					{
+						"name": "AP_CONDIC",
+						"type": "String"
+					},
+					{
+						"name": "AP_GESTAO",
+						"type": "String"
+					},
+					{
+						"name": "AP_CODUNI",
+						"type": "String"
+					},
+					{
+						"name": "AP_AUTORIZ",
+						"type": "String"
+					},
+					{
+						"name": "AP_CMP",
+						"type": "String"
+					},
+					{
+						"name": "AP_PRIPAL",
+						"type": "String"
+					},
+					{
+						"name": "AP_VL_AP",
+						"type": "String"
+					},
+					{
+						"name": "AP_UFMUN",
+						"type": "String"
+					},
+					{
+						"name": "AP_TPUPS",
+						"type": "String"
+					},
+					{
+						"name": "AP_TIPPRE",
+						"type": "String"
+					},
+					{
+						"name": "AP_MN_IND",
+						"type": "String"
+					},
+					{
+						"name": "AP_CNPJCPF",
+						"type": "String"
+					},
+					{
+						"name": "AP_CNPJMNT",
+						"type": "String"
+					},
+					{
+						"name": "AP_CNSPCN",
+						"type": "String"
+					},
+					{
+						"name": "AP_COIDADE",
+						"type": "String"
+					},
+					{
+						"name": "AP_NUIDADE",
+						"type": "String"
+					},
+					{
+						"name": "AP_SEXO",
+						"type": "String"
+					},
+					{
+						"name": "AP_RACACOR",
+						"type": "String"
+					},
+					{
+						"name": "AP_MUNPCN",
+						"type": "String"
+					},
+					{
+						"name": "AP_UFNACIO",
+						"type": "String"
+					},
+					{
+						"name": "AP_CEPPCN",
+						"type": "String"
+					},
+					{
+						"name": "AP_UFDIF",
+						"type": "String"
+					},
+					{
+						"name": "AP_MNDIF",
+						"type": "String"
+					},
+					{
+						"name": "AP_DTINIC",
+						"type": "String"
+					},
+					{
+						"name": "AP_DTFIM",
+						"type": "String"
+					},
+					{
+						"name": "AP_TPATEN",
+						"type": "String"
+					},
+					{
+						"name": "AP_TPAPAC",
+						"type": "String"
+					},
+					{
+						"name": "AP_MOTSAI",
+						"type": "String"
+					},
+					{
+						"name": "AP_OBITO",
+						"type": "String"
+					},
+					{
+						"name": "AP_ENCERR",
+						"type": "String"
+					},
+					{
+						"name": "AP_PERMAN",
+						"type": "String"
+					},
+					{
+						"name": "AP_ALTA",
+						"type": "String"
+					},
+					{
+						"name": "AP_TRANSF",
+						"type": "String"
+					},
+					{
+						"name": "AP_DTOCOR",
+						"type": "String"
+					},
+					{
+						"name": "AP_CODEMI",
+						"type": "String"
+					},
+					{
+						"name": "AP_CATEND",
+						"type": "String"
+					},
+					{
+						"name": "AP_APACANT",
+						"type": "String"
+					},
+					{
+						"name": "AP_UNISOL",
+						"type": "String"
+					},
+					{
+						"name": "AP_DTSOLIC",
+						"type": "String"
+					},
+					{
+						"name": "AP_DTAUT",
+						"type": "String"
+					},
+					{
+						"name": "AP_CIDCAS",
+						"type": "String"
+					},
+					{
+						"name": "AP_CIDPRI",
+						"type": "String"
+					},
+					{
+						"name": "AP_CIDSEC",
+						"type": "String"
+					},
+					{
+						"name": "AP_ETNIA",
+						"type": "String"
+					},
+					{
+						"name": "AB_IMC",
+						"type": "String"
+					},
+					{
+						"name": "AB_PROCAIH",
+						"type": "String"
+					},
+					{
+						"name": "AB_DTCIRUR",
+						"type": "String"
+					},
+					{
+						"name": "AB_NUMAIH",
+						"type": "String"
+					},
+					{
+						"name": "AB_PRCAIH2",
+						"type": "String"
+					},
+					{
+						"name": "AB_PRCAIH3",
+						"type": "String"
+					},
+					{
+						"name": "AB_NUMAIH2",
+						"type": "String"
+					},
+					{
+						"name": "AB_DTCIRG2",
+						"type": "String"
+					},
+					{
+						"name": "AB_MESACOM",
+						"type": "String"
+					},
+					{
+						"name": "AB_ANOACOM",
+						"type": "String"
+					},
+					{
+						"name": "AB_PONTBAR",
+						"type": "String"
+					},
+					{
+						"name": "AB_TABBARR",
+						"type": "String"
+					},
+					{
+						"name": "AP_NATJUR",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_susbecantt')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/test_output')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_datalake_dungeon",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "csv",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_datalake_dungeon')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/test_trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "ingestion_bronze",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"SourceFiles": "[parameters('test_trigger_properties_ingestion_bronze_parameters_SourceFiles')]"
+						}
+					}
+				],
+				"type": "BlobEventsTrigger",
+				"typeProperties": {
+					"blobPathBeginsWith": "/susbecantt/blobs/",
+					"blobPathEndsWith": ".csv",
+					"ignoreEmptyBlobs": true,
+					"scope": "[parameters('test_trigger_properties_typeProperties_scope')]",
+					"events": [
+						"Microsoft.Storage.BlobCreated"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/ingestion_bronze')]"
+			]
+		}
+	]
+}

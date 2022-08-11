@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "df-dungeon-dados"
+		},
+		"ls_databricks_dungeon_properties_typeProperties_existingClusterId": {
+			"value": "0810-204239-ipynp2dy"
+		},
+		"ls_datalake_dungeon_properties_typeProperties_url": {
+			"value": "https://dungeonsdados.dfs.core.windows.net"
+		},
+		"ls_datalake_susbecantt_properties_typeProperties_url": {
+			"value": "https://susbecantt.dfs.core.windows.net"
+		},
+		"ls_kv_dungeon_properties_typeProperties_baseUrl": {
+			"value": "https://kv-dungeon-dados.vault.azure.net/"
+		},
+		"test_trigger_properties_ingestion_bronze_parameters_SourceFiles": {
+			"value": "@triggerBody().fileName"
+		},
+		"test_trigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/d44271f6-fec8-44b4-b79f-a0fd742c7602/resourceGroups/susbecantt/providers/Microsoft.Storage/storageAccounts/susbecantt"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
