@@ -6,11 +6,11 @@
 		"pipelines": [
 			{
 				"pipelineReference": {
-					"referenceName": "pipeline1",
+					"referenceName": "ingestion_bronze",
 					"type": "PipelineReference"
 				},
 				"parameters": {
-					"SourceFile": "@triggerBody().fileName"
+					"SourceFiles": "@triggerBody().fileName"
 				}
 			}
 		],

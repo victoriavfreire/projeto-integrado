@@ -1,23 +1,37 @@
 {
-	"name": "pipeline1",
+	"name": "ingestion_bronze",
 	"properties": {
 		"activities": [
 			{
-				"name": "ForEachCsvSUS",
-				"type": "ForEach",
+				"name": "to_bronze",
+				"type": "DatabricksNotebook",
 				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:45:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"items": {
-						"value": "@pipeline().parameters.SourceFile",
-						"type": "Expression"
+					"notebookPath": "/Users/aspindol@emeal.nttdata.com/dungeons_dados/bronze_ingestion",
+					"baseParameters": {
+						"new_created_files": {
+							"value": "@pipeline().parameters.SourceFiles",
+							"type": "Expression"
+						}
 					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_databricks_dungeon",
+					"type": "LinkedServiceReference"
 				}
 			}
 		],
 		"parameters": {
-			"SourceFile": {
-				"type": "array"
+			"SourceFiles": {
+				"type": "string"
 			}
 		},
 		"folder": {
