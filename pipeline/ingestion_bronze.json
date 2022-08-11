@@ -17,7 +17,7 @@
 				"typeProperties": {
 					"notebookPath": "/Users/aspindol@emeal.nttdata.com/dungeons_dados/bronze_ingestion",
 					"baseParameters": {
-						"new_created_files": {
+						"new_created_file": {
 							"value": "@pipeline().parameters.SourceFiles",
 							"type": "Expression"
 						}
