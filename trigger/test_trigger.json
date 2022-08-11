@@ -16,10 +16,10 @@
 		],
 		"type": "BlobEventsTrigger",
 		"typeProperties": {
-			"blobPathBeginsWith": "/susbecantt/blobs/",
+			"blobPathBeginsWith": "/bronze/blobs/",
 			"blobPathEndsWith": ".csv",
 			"ignoreEmptyBlobs": true,
-			"scope": "/subscriptions/d44271f6-fec8-44b4-b79f-a0fd742c7602/resourceGroups/susbecantt/providers/Microsoft.Storage/storageAccounts/susbecantt",
+			"scope": "/subscriptions/d44271f6-fec8-44b4-b79f-a0fd742c7602/resourceGroups/dungeons_dados/providers/Microsoft.Storage/storageAccounts/dungeonsdados",
 			"events": [
 				"Microsoft.Storage.BlobCreated"
 			]
