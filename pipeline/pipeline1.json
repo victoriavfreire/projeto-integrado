@@ -6,9 +6,20 @@
 				"name": "ForEachCsvSUS",
 				"type": "ForEach",
 				"dependsOn": [],
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"parameters": {
+			"SourceFile": {
+				"type": "string"
+			}
+		},
 		"folder": {
 			"name": "bronze"
 		},
