@@ -36,7 +36,7 @@
 								"notebookPath": "/Users/aspindol@emeal.nttdata.com/dungeons_dados/bronze_ingestion",
 								"baseParameters": {
 									"new_created_file": {
-										"value": "@item()",
+										"value": "@item().name",
 										"type": "Expression"
 									}
 								}
@@ -63,10 +63,12 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "test_dataset",
+						"referenceName": "initial_input",
 						"type": "DatasetReference"
 					},
-					"fieldList": [],
+					"fieldList": [
+						"childItems"
+					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
 						"enablePartitionDiscovery": false
