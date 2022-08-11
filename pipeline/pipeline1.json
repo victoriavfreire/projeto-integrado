@@ -9,7 +9,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "",
+						"value": "@pipeline().parameters.SourceFile",
 						"type": "Expression"
 					}
 				}
@@ -17,7 +17,7 @@
 		],
 		"parameters": {
 			"SourceFile": {
-				"type": "string"
+				"type": "array"
 			}
 		},
 		"folder": {
