@@ -10,3 +10,6 @@
 
 #### Arquitetura Final
 ![alt text](https://github.com/victoriavfreire/projeto-integrado/blob/main/arquitetura.png?raw=true)
+
+#### Modelagem dos dados
+![alt text](https://github.com/victoriavfreire/projeto-integrado/blob/main/modelagem.png?raw=true)
