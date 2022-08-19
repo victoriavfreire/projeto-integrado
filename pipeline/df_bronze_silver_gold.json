@@ -1,0 +1,58 @@
+{
+	"name": "df_bronze_silver_gold",
+	"properties": {
+		"activities": [
+			{
+				"name": "bronze_ingestion",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.05:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/aspindol@emeal.nttdata.com/dungeons_dados/bronze_ingestion"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_databricks_dungeon",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "silver_ingestion",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "bronze_ingestion",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.05:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Users/aspindol@emeal.nttdata.com/dungeons_dados/silver_ingestion"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_databricks_dungeon",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "ETL"
+		},
+		"annotations": []
+	}
+}
